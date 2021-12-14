@@ -31,10 +31,8 @@ func TestGetLocation_OK(t *testing.T) {
 	}))
 	// Close the server when test finishes
 	defer server.Close()
-	Client = server.Client()
-	Host = server.URL
-
-	result, err := GetLocation(zipCode)
+	api := NewGateway(server.Client(), server.URL)
+	result, err := api.GetLocation(zipCode)
 	assert.Equal(t, result.Cep, zipCode)
 	assert.Nil(t, err)
 }
@@ -46,9 +44,8 @@ func TestGetLocation_EmptyJSON_OK(t *testing.T) {
 	}))
 	// Close the server when test finishes
 	defer server.Close()
-	Client = server.Client()
-	Host = server.URL
-	_, err := GetLocation(zipCode)
+	api := NewGateway(server.Client(), server.URL)
+	_, err := api.GetLocation(zipCode)
 	assert.NotNil(t, err)
 }
 
@@ -58,9 +55,8 @@ func TestGetLocation_NOK(t *testing.T) {
 	}))
 	// Close the server when test finishes
 	defer server.Close()
-	Client = server.Client()
-	Host = server.URL
-	_, err := GetLocation(zipCode)
+	api := NewGateway(server.Client(), server.URL)
+	_, err := api.GetLocation(zipCode)
 	assert.NotNil(t, err)
 }
 

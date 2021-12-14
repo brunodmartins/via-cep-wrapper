@@ -28,12 +28,28 @@ func (dto *ViaCepResponse) ToAddress() *domain.Address {
 	return result
 }
 
-var Client = http.DefaultClient
-var Host = "https://viacep.com.br"
+
+
+//go:generate mockgen -source=./viacep.go -destination=./mock/viacep_mock.go
+type Gateway interface {
+	GetLocation(zipCode string) (*ViaCepResponse, error)
+}
+
+type apiGateway struct {
+	client *http.Client
+	host  string
+}
+
+func NewGateway(client *http.Client, host string) Gateway {
+	return &apiGateway{
+		client: client,
+		host: host,
+	}
+}
 
 //GetLocation query the `viacep` HTTP API for a given zipCode
-func GetLocation(zipCode string) (*ViaCepResponse, error) {
-	response, err := Client.Get(fmt.Sprintf("%s/ws/%s/json/", Host, zipCode))
+func (api *apiGateway) GetLocation(zipCode string) (*ViaCepResponse, error) {
+	response, err := api.client.Get(fmt.Sprintf("%s/ws/%s/json/", api.host, zipCode))
 	if err != nil {
 		return nil, err
 	}
