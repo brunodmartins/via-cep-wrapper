@@ -10,7 +10,11 @@ type ErrorMessage struct {
 	Message string `json:"message"`
 }
 
-func GetCEP(ctx *fiber.Ctx) error {
+func SetUpRoutes(app *fiber.App) {
+	app.Get("/via_cep_wrapper/:cep", getCep)
+}
+
+func getCep(ctx *fiber.Ctx) error {
 	zipCode := ctx.Params("cep")
 	if zipCode == "" {
 		return ctx.Status(http.StatusBadRequest).JSON(ErrorMessage{"Cep esta vazio"})

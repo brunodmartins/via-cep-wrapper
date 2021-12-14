@@ -9,6 +9,6 @@ import (
 
 func main() {
 	app := fiber.New()
-	app.Get("/via_cep_wrapper/:cep", location.GetCEP)
+	location.SetUpRoutes(app)
 	log.Fatal(app.Listen(":8080"))
 }
