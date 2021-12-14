@@ -4,6 +4,7 @@ import (
 	"BrunoDM2943/via-cep-wrapper/internal/constants/domain"
 	"BrunoDM2943/via-cep-wrapper/internal/gateway/viacep"
 	"encoding/json"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
 	"io"
@@ -38,14 +39,14 @@ func Test_getCep_OK(t *testing.T) {
 
 	app := fiber.New()
 	SetUpRoutes(app)
-	req := httptest.NewRequest("GET", "/via_cep_wrapper/01001-000", nil)
+	req := httptest.NewRequest("GET", fmt.Sprintf("/via_cep_wrapper/%s", zipCode), nil)
 	resp, err := app.Test(req, -1)
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	body, _ := io.ReadAll(resp.Body)
 	result := &domain.Address{}
 	_ = json.Unmarshal(body, result)
-	assert.Equal(t, "01001-000", result.ZipCode)
+	assert.Equal(t, zipCode, result.ZipCode)
 
 }
 
@@ -60,7 +61,7 @@ func Test_getCep_NOK(t *testing.T) {
 
 	app := fiber.New()
 	SetUpRoutes(app)
-	req := httptest.NewRequest("GET", "/via_cep_wrapper/01001-000", nil)
+	req := httptest.NewRequest("GET", fmt.Sprintf("/via_cep_wrapper/%s", zipCode), nil)
 	resp, err := app.Test(req, -1)
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)

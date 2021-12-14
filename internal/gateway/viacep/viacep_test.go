@@ -8,6 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const zipCode = "01001-000"
+
 func TestGetLocation_OK(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		responseBody := `
@@ -31,8 +33,9 @@ func TestGetLocation_OK(t *testing.T) {
 	defer server.Close()
 	Client = server.Client()
 	Host = server.URL
-	result, err := GetLocation("01001000")
-	assert.Equal(t, result.Cep, "01001-000")
+
+	result, err := GetLocation(zipCode)
+	assert.Equal(t, result.Cep, zipCode)
 	assert.Nil(t, err)
 }
 
@@ -45,7 +48,7 @@ func TestGetLocation_EmptyJSON_OK(t *testing.T) {
 	defer server.Close()
 	Client = server.Client()
 	Host = server.URL
-	_, err := GetLocation("01001-000")
+	_, err := GetLocation(zipCode)
 	assert.NotNil(t, err)
 }
 
@@ -57,7 +60,7 @@ func TestGetLocation_NOK(t *testing.T) {
 	defer server.Close()
 	Client = server.Client()
 	Host = server.URL
-	_, err := GetLocation("01001-000")
+	_, err := GetLocation(zipCode)
 	assert.NotNil(t, err)
 }
 

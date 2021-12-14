@@ -31,6 +31,7 @@ func (dto *ViaCepResponse) ToAddress() *domain.Address {
 var Client = http.DefaultClient
 var Host = "https://viacep.com.br"
 
+//GetLocation query the `viacep` HTTP API for a given zipCode
 func GetLocation(zipCode string) (*ViaCepResponse, error) {
 	response, err := Client.Get(fmt.Sprintf("%s/ws/%s/json/", Host, zipCode))
 	if err != nil {

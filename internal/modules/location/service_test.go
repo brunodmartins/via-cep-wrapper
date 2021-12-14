@@ -8,6 +8,8 @@ import (
 	"testing"
 )
 
+const zipCode = "01001-000"
+
 func TestSearchLocation_OK(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		responseBody := `
@@ -31,8 +33,8 @@ func TestSearchLocation_OK(t *testing.T) {
 	defer server.Close()
 	viacep.Client = server.Client()
 	viacep.Host = server.URL
-	result, err := SearchLocation("01001-000")
-	assert.Equal(t, result.ZipCode, "01001-000")
+	result, err := SearchLocation(zipCode)
+	assert.Equal(t, result.ZipCode, zipCode)
 	assert.Nil(t, err)
 }
 
@@ -44,7 +46,8 @@ func TestSearchLocation_NOK(t *testing.T) {
 	defer server.Close()
 	viacep.Client = server.Client()
 	viacep.Host = server.URL
-	_, err := SearchLocation("01001-000")
+
+	_, err := SearchLocation(zipCode)
 	assert.NotNil(t, err)
 }
 

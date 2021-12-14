@@ -5,6 +5,7 @@ import (
 	"BrunoDM2943/via-cep-wrapper/internal/gateway/viacep"
 )
 
+//SearchLocation search for a given zipcode
 func SearchLocation(zipCode string) (*domain.Address, error) {
 	dto, err := viacep.GetLocation(zipCode)
 	if err != nil {
